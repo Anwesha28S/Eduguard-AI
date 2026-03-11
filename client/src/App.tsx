@@ -1,35 +1,63 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { DashboardLayout } from './layouts/DashboardLayout';
+import { Login } from './pages/Login';
+import { AdminDashboard } from './pages/AdminDashboard';
+import { FacultyDashboard } from './pages/FacultyDashboard';
+import { StudentDashboard } from './pages/StudentDashboard';
+import { Attendance } from './pages/Attendance';
+import { RiskMonitoring } from './pages/RiskMonitoring';
+import { StudentsDirectory } from './pages/StudentsDirectory';
+import { StudentProfile } from './pages/StudentProfile';
+import { Profile } from './pages/Profile';
+import { ClassCheckIn } from './pages/ClassCheckIn';
+import { AuthProvider, useAuth } from './store/AuthContext';
+
+// Mock routing based on selected role
+const RoleBasedDashboard = () => {
+  const role = localStorage.getItem('role') || 'admin';
+
+  if (role === 'admin' || role === 'counselor') return <AdminDashboard />;
+  if (role === 'faculty') return <FacultyDashboard />;
+  if (role === 'student') return <StudentDashboard />;
+  return <AdminDashboard />;
+};
+
+const ProtectedRoute = () => {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <Outlet />;
+};
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route element={<ProtectedRoute />}>
+            <Route element={<DashboardLayout />}>
+              <Route path="/" element={<RoleBasedDashboard />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/check-in" element={<ClassCheckIn />} />
+              <Route path="/attendance" element={<Attendance />} />
+              <Route path="/risk-monitoring" element={<RiskMonitoring />} />
+              <Route path="/students" element={<StudentsDirectory />} />
+              <Route path="/students/:id" element={<StudentProfile />} />
+            </Route>
+          </Route>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;

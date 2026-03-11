@@ -1,0 +1,17 @@
+﻿
+> client@0.0.0 build
+> tsc -b && vite build
+
+src/App.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/components/Navbar.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/components/Sidebar.tsx(27,17): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Object literal may only specify known properties, and 'className' does not exist in type 'Partial<unknown> & Attributes'.
+src/layouts/DashboardLayout.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/AdminDashboard.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/Attendance.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/FacultyDashboard.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/RiskMonitoring.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/StudentDashboard.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/StudentProfile.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/StudentsDirectory.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
